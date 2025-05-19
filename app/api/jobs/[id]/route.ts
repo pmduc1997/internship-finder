@@ -4,9 +4,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const jobId = params.id;
+  const { id: jobId } = await params;
 
   const url = `https://jsearch.p.rapidapi.com/job-details?job_id=${encodeURIComponent(
     jobId
