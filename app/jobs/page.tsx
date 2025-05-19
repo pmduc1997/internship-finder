@@ -5,15 +5,24 @@ import Link from "next/link";
 import axios from "axios";
 import { useState } from "react";
 import Pagination from "../components/Pagination";
+import { useLanguageStore } from "../lib/store";
 
 const fetchJobs = async (page: number) => {
   const response = await axios.get(`/api/jobs?page=${page}`);
   return response.data;
 };
 
+export interface Job {
+  job_id: string;
+  job_title: string;
+  employer_name: string;
+  employer_logo?: string;
+  job_location: string;
+}
+
 export default function HomePage() {
   const [page, setPage] = useState(1);
-  const [language, setLanguage] = useState<"en" | "vn">("en");
+  const { language } = useLanguageStore(); // ✅ use global state
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["jobs", page],
@@ -21,32 +30,30 @@ export default function HomePage() {
   });
 
   const jobs = data?.data ?? [];
-  const hasNext = data?.hasMore;
-  const hasPrev = page > 1;
 
-  const translate = (text: Record<"en" | "vn", string>) => text[language];
+  const translate = (text: Record<"en" | "vi", string>) => text[language];
 
   return (
     <main className="p-4 md:p-6 max-w-4xl mx-auto space-y-6">
       <h1 className="text-xl md:text-2xl font-bold text-center">
-        {translate({ en: "Internship Jobs", vn: "Việc làm thực tập" })}
+        {translate({ en: "Internship Jobs", vi: "Việc làm thực tập" })}
       </h1>
 
       {isLoading ? (
         <p className="text-center">
-          {translate({ en: "Loading...", vn: "Đang tải..." })}
+          {translate({ en: "Loading...", vi: "Đang tải..." })}
         </p>
       ) : error ? (
         <p className="text-center text-red-500">
           {translate({
             en: "Error loading jobs.",
-            vn: "Lỗi khi tải danh sách việc làm.",
+            vi: "Lỗi khi tải danh sách việc làm.",
           })}
         </p>
       ) : (
         <>
           <ul className="grid gap-4 sm:grid-cols-2">
-            {jobs.map((job: any) => (
+            {jobs.map((job: Job) => (
               <li
                 key={job.job_id}
                 className="bg-white rounded-xl p-5 border border-gray-200 shadow hover:shadow-md transition"

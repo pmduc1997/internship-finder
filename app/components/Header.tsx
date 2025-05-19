@@ -2,10 +2,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useLanguageStore } from "../lib/store";
 
 export default function Header() {
-  const [selectedLang, setSelectedLang] = useState<"en" | "vi">("en");
+  const { language, setLanguage } = useLanguageStore();
 
   const flagSrc = {
     en: "/logos/uk.png",
@@ -20,15 +20,10 @@ export default function Header() {
       </Link>
 
       <div className="flex items-center gap-2 border border-gray-300 rounded px-2 py-1">
-        <Image
-          src={flagSrc[selectedLang]}
-          alt={selectedLang}
-          width={20}
-          height={20}
-        />
+        <Image src={flagSrc[language]} alt={language} width={20} height={20} />
         <select
-          value={selectedLang}
-          onChange={(e) => setSelectedLang(e.target.value as "en" | "vi")}
+          value={language}
+          onChange={(e) => setLanguage(e.target.value as "en" | "vi")}
           className="bg-transparent outline-none text-sm"
         >
           <option value="en">English</option>

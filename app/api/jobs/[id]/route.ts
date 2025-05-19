@@ -10,7 +10,7 @@ export async function GET(
 
   const url = `https://jsearch.p.rapidapi.com/job-details?job_id=${encodeURIComponent(
     jobId
-  )}&country=us`;
+  )}&country=vn`;
 
   try {
     const res = await fetch(url, {
