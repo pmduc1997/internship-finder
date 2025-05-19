@@ -1,13 +1,14 @@
-// app/api/jobs/route.ts
-
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   const page = parseInt(req.nextUrl.searchParams.get("page") || "1");
+  const query = req.nextUrl.searchParams.get("query") || "intern"; // fallback to 'intern'
   const limit = 10;
   const offset = (page - 1) * limit;
 
-  const url = `https://jsearch.p.rapidapi.com/search?query=intern&country=us&page=${page}&num_pages=1`;
+  const url = `https://jsearch.p.rapidapi.com/search?query=${encodeURIComponent(
+    query
+  )}&country=vn&page=${page}&num_pages=1`;
 
   try {
     const res = await fetch(url, {

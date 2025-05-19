@@ -1,4 +1,3 @@
-// app/job/[jobId]/page.tsx
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
@@ -23,31 +22,50 @@ export default function JobDetailPage() {
     enabled: !!jobId,
   });
 
-  if (isLoading) return <p>Loading job details...</p>;
-  if (error || !job) return <p>Failed to load job details.</p>;
+  if (isLoading) return <p className="p-6">Loading job details...</p>;
+  if (error || !job)
+    return <p className="p-6 text-red-500">Failed to load job details.</p>;
 
   return (
-    <div className="p-6 space-y-4">
-      <h1 className="text-2xl font-bold">{job.job_title}</h1>
-      <p className="text-sm text-gray-600">{job.employer_name}</p>
-      <p className="text-sm text-gray-500">{job.job_location}</p>
+    <div className="p-6 max-w-3xl mx-auto">
+      <div className="bg-white rounded-lg shadow-md p-6 space-y-6 border border-gray-100">
+        <div className="flex items-start gap-4">
+          {job.employer_logo && (
+            <img
+              src={job.employer_logo}
+              alt="Employer Logo"
+              className="w-16 h-16 object-contain rounded border"
+            />
+          )}
+          <div className="flex-1">
+            <h1 className="text-2xl font-bold text-gray-800">
+              {job.job_title}
+            </h1>
+            <p className="text-sm text-gray-600">{job.employer_name}</p>
+            <p className="text-sm text-gray-500">{job.job_location}</p>
+          </div>
+        </div>
 
-      {job.employer_logo && (
-        <img src={job.employer_logo} alt="Employer Logo" className="w-32" />
-      )}
+        <div>
+          <h2 className="text-lg font-semibold mb-2 text-primary">
+            Job Description
+          </h2>
+          <p className="whitespace-pre-line text-gray-700 text-sm leading-relaxed">
+            {job.job_description}
+          </p>
+        </div>
 
-      <p className="whitespace-pre-line">{job.job_description}</p>
-
-      {job.job_apply_link && (
-        <a
-          href={job.job_apply_link}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded"
-        >
-          Apply Now
-        </a>
-      )}
+        {job.job_apply_link && (
+          <a
+            href={job.job_apply_link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block px-6 py-2 bg-primary text-white rounded hover:bg-blue-700 transition"
+          >
+            Apply Now
+          </a>
+        )}
+      </div>
     </div>
   );
 }
